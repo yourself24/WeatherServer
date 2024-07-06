@@ -4,9 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @Entity(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +21,15 @@ public class User {
 
 
     private String location;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getName() {
         return name;
@@ -35,6 +48,12 @@ public class User {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Implement this method to return authorities/roles for the user
+        // You can return a list of roles or authorities that the user has
+        return null;
+    }
 
     public String getLocation() {
         return location;
@@ -43,22 +62,30 @@ public class User {
     public void setLocation(String location) {
         this.location = location;
     }
-    public Long getId(){
+
+    public Long getId() {
         return id;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getPassword(){
+
+    public String getPassword() {
         return password;
     }
 
-    public User(String name, String email,String password, String location) {
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public User(String name, String email, String password, String location, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.location = location;
+        this.role = role;
     }
 
     public User() {

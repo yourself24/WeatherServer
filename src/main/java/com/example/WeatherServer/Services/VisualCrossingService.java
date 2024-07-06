@@ -5,15 +5,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class VisualCrossingService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public VisualCrossing getVisualCrossingData() {
+    public VisualCrossing getVisualCrossingData(double lat, double lon) {
         String keyAPI = "KCG89E6H2L9LZ26J4GXXL5GSB";
-        String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Dej,RO/2024-06-23T20:50:00?key=" + keyAPI;
-        JsonNode jsonNode = restTemplate.getForObject(url, JsonNode.class);
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter vcFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedTime = currentTime.format(vcFormatter);
+        String url2 = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"+lat+","+lon+"/"+formattedTime+"?units=metric&key=" + keyAPI;
+        System.out.println(url2);
+        String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Dej,RO/2024-07-04T21:20:00?units=metric&key=" + keyAPI;
+        JsonNode jsonNode = restTemplate.getForObject(url2, JsonNode.class);
         return parseVisualCrossingResp(jsonNode);
     }
 
