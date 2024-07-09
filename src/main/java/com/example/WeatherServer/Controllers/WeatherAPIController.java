@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/WeatherAPIData")
+@RequestMapping("/api/weather/WeatherAPIData")
 public class WeatherAPIController {
     private final WeatherAPIService weatherAPIService;
 
