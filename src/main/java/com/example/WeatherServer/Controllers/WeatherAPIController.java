@@ -5,6 +5,7 @@ import com.example.WeatherServer.Models.WeatherProviders.WeatherBit;
 import com.example.WeatherServer.Services.WeatherAPIService;
 import com.example.WeatherServer.Services.WeatherBitService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +17,9 @@ public class WeatherAPIController {
     public WeatherAPIController(WeatherAPIService weatherAPIService) {
         this.weatherAPIService= weatherAPIService;
     }
-    @GetMapping("/current")
-    public WeatherAPI getCurrentData(){
-        return weatherAPIService.getWeatherAPIData();
+    @GetMapping("/current/{latitude}/{longitude}")
+    public WeatherAPI getCurrentData(@PathVariable double latitude, @PathVariable double longitude){
+        return weatherAPIService.getWeatherAPIData(latitude,longitude);
     }
 
 }

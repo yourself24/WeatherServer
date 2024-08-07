@@ -55,6 +55,17 @@ public class UserService implements UserDetailsService {
         return false;
 
     }
+    public boolean updateUser(User user){
+        if(userRepo.findUserByEmail(user.getEmail())!=null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepo.save(user);
+            return true;
+        }
+        return false;
+    }
+    public User findUserByEmail(String email){
+        return userRepo.findUserByEmail(email);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -11,9 +11,13 @@ public class WeatherAPIService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public WeatherAPI getWeatherAPIData() {
+    public WeatherAPI getWeatherAPIData(double latitude, double longitude){
         String keyAPI = "e21afa5f14fe44d58c9183936240407";
-        String url = "http://api.weatherapi.com/v1/current.json?aqi=yes&q=Dej&key="+
+        String url = "http://api.weatherapi.com/v1/current.json?aqi=yes&q="
+                + latitude
+                +","
+                + longitude
+                +"&key="+
                 keyAPI;
         System.out.println(url);
         JsonNode jsonNode = restTemplate.getForObject(url, JsonNode.class);

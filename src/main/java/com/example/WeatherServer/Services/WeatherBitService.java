@@ -1,6 +1,4 @@
 package com.example.WeatherServer.Services;
-
-import com.example.WeatherServer.Models.WeatherProviders.VisualCrossing;
 import com.example.WeatherServer.Models.WeatherProviders.WeatherBit;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
@@ -11,9 +9,14 @@ public class WeatherBitService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public WeatherBit getWeatherBitData() {
+    public WeatherBit getWeatherBitData(double latitude,double longitude) {
         String keyAPI = "03c48fa4dd74495a997f76ecd3f91e476";
-        String url = "https://api.weatherbit.io/v2.0/current?lat=47.14&lon=23.87&key=03c48fa4dd74495a997f76ecd3f91e47";
+        String url = "https://api.weatherbit.io/v2.0/current?lat="
+                +latitude
+                +"&lon="
+                +longitude
+                +"&key="
+                +keyAPI;
 
         System.out.println(url);
         JsonNode jsonNode = restTemplate.getForObject(url, JsonNode.class);

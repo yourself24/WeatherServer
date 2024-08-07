@@ -8,9 +8,14 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherMapService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public WeatherMap getWeatherMapData(){
+    public WeatherMap getWeatherMapData(double latitude, double longitude){
         String APIKey = "4017fbd4ce5be8d9f707a026659cbd15";
-        String url = "https://api.openweathermap.org/data/2.5/weather?lat=47.14&lon=23.87&units=metric&appid=" + APIKey;
+        String url = "https://api.openweathermap.org/data/2.5/weather?lat="
+                +latitude
+                +"&lon="
+                +longitude
+                +"&units=metric&appid="
+                + APIKey;
         JsonNode jsonNode = restTemplate.getForObject(url, JsonNode.class);
         return parseWeatherMapResp(jsonNode);
 

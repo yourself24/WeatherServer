@@ -1,11 +1,12 @@
 package com.example.WeatherServer.Controllers;
 
 import com.example.WeatherServer.Models.LoginUser;
+import com.example.WeatherServer.Models.PasswordReset;
 import com.example.WeatherServer.Models.User;
+import com.example.WeatherServer.Services.EmailServiceImplementation;
 import com.example.WeatherServer.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,23 +20,22 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-
+    private final EmailServiceImplementation emailServiceImplementation;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
-    public UserController(AuthenticationManager authenticationManager, UserService userService, SecurityContextRepository securityContextRepository) {
+
+    public UserController(AuthenticationManager authenticationManager, UserService userService, SecurityContextRepository securityContextRepository, EmailServiceImplementation emailServiceImplementation) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.securityContextRepository = securityContextRepository;
+        this.emailServiceImplementation = emailServiceImplementation;
     }
 
     @GetMapping("/all")
@@ -46,11 +46,50 @@ public class UserController {
     public Optional<User> getUser(@PathVariable  Long id){
         return userService.getUserById(id);
     }
-    @PostMapping("/create")
-    public User createUser(@RequestBody User user) {
 
-        return userService.createUser(user);
+@PostMapping("/create")
+public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        User newUser = userService.createUser(user);
+
+        // Send confirmation email
+        String toEmail = newUser.getEmail();  // assuming User has a getEmail() method
+        System.out.println("Sending email to: " + toEmail);
+        String subject = "Welcome to Our Service!";
+        String body = "Dear " + newUser.getName() + ",\n\nThank you for registering. Welcome to our platform!\n\nBest regards,\n Luca(p.s. Te iubesc <3)";
+
+        emailServiceImplementation.sendSimpleEmail(toEmail, subject, body);
+
+        response.put("message", "User created successfully and confirmation email sent.");
+        response.put("user", newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (Exception e) {
+        response.put("message", "User creation failed: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+}
+@PostMapping("/forgot-password")
+public ResponseEntity<Map<String, Object>> forgotPassword(@RequestBody PasswordReset reset) {
+       String email = reset.getEmail();
+    System.out.println("Email: " + email);
+    User user = userService.findUserByEmail(email);
+       if(user==null){
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("Nonexistent user", "User not found"));
+       }
+       //generate random new password
+         String newPassword = UUID.randomUUID().toString();
+         user.setPassword(newPassword);
+         userService.updateUser(user);
+       String body = "Dear user, below you can find your new temporary password. Please change it as soon as possible.\n\n"
+               + "New password: " + newPassword + "\n\nBest regards,\n Weather Aggregator Team";
+       emailServiceImplementation.sendSimpleEmail(email, "Password reset", body);
+      return ResponseEntity.ok(Map.of("Existing user", "Email sent"));
+
+
+
+}
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginUser loginUser, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> res = new HashMap<>();
