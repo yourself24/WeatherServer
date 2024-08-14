@@ -57,7 +57,7 @@ public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
         String toEmail = newUser.getEmail();  // assuming User has a getEmail() method
         System.out.println("Sending email to: " + toEmail);
         String subject = "Welcome to Our Service!";
-        String body = "Dear " + newUser.getName() + ",\n\nThank you for registering. Welcome to our platform!\n\nBest regards,\n Luca(p.s. Te iubesc <3)";
+        String body = "Dear " + newUser.getName() + ",\n\nThank you for registering. Welcome to our platform!\n\nBest regards,\n Luca";
 
         emailServiceImplementation.sendSimpleEmail(toEmail, subject, body);
 
