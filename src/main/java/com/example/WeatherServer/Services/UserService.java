@@ -55,6 +55,9 @@ public class UserService implements UserDetailsService {
         return false;
 
     }
+    public User updateUser(User user){
+        return userRepo.save(user);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,6 +66,12 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User with email " + username + " not found");
         }
        return  user;
+    }
+
+
+
+    public User getUserByEmail(String email){
+        return userRepo.findUserByEmail(email);
     }
 }
 

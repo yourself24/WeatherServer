@@ -1,11 +1,11 @@
 package com.example.WeatherServer.Controllers;
 
 import com.example.WeatherServer.Models.LoginUser;
+import com.example.WeatherServer.Models.UpdatedUser;
 import com.example.WeatherServer.Models.User;
 import com.example.WeatherServer.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +46,11 @@ public class UserController {
     public Optional<User> getUser(@PathVariable  Long id){
         return userService.getUserById(id);
     }
+    @GetMapping("/getEmail/{email}")
+    public User getUserByEmail(@PathVariable String email){
+        return userService.getUserByEmail(email);
+    }
+
     @PostMapping("/create")
     public User createUser(@RequestBody User user) {
 
@@ -76,6 +81,25 @@ public class UserController {
             res.put("message", "Login failed: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
         }
+    }
+    @PostMapping("/update/{id}")
+    public User updateUser(@RequestBody UpdatedUser user, @PathVariable Long id){
+        User updatingUser = userService.getUserById(id).orElse(null);
+        if(updatingUser == null){
+            return null;
+        }
+        updatingUser.setEmail(user.getEmail());
+        updatingUser.setName(user.getName());
+        updatingUser.setLocation(user.getLocation());
+        updatingUser.setRole(user.getRole());
+        userService.updateUser(updatingUser);
+
+        return updatingUser;
+    }
+
+    @PostMapping("/delete/{id}")
+    public void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 
     @PostMapping("/logout")
