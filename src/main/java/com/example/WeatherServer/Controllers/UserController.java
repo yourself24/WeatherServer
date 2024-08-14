@@ -2,6 +2,7 @@ package com.example.WeatherServer.Controllers;
 
 import com.example.WeatherServer.Models.LoginUser;
 import com.example.WeatherServer.Models.PasswordReset;
+import com.example.WeatherServer.Models.UpdatedUser;
 import com.example.WeatherServer.Models.User;
 import com.example.WeatherServer.Services.EmailServiceImplementation;
 import com.example.WeatherServer.Services.UserService;
@@ -69,6 +70,11 @@ public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
+
+    @GetMapping("/getEmail/{email}")
+    public User getUserByEmail(@PathVariable String email){
+        return userService.findUserByEmail(email);
+    }
 @PostMapping("/forgot-password")
 public ResponseEntity<Map<String, Object>> forgotPassword(@RequestBody PasswordReset reset) {
        String email = reset.getEmail();
@@ -116,7 +122,24 @@ public ResponseEntity<Map<String, Object>> forgotPassword(@RequestBody PasswordR
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
         }
     }
+    @PostMapping("/update/{id}")
+    public User updateUser(@RequestBody UpdatedUser user, @PathVariable Long id){
+        User updatingUser = userService.getUserById(id).orElse(null);
+        if(updatingUser == null){
+            return null;
+        }
+        updatingUser.setEmail(user.getEmail());
+        updatingUser.setName(user.getName());
+        updatingUser.setLocation(user.getLocation());
+        updatingUser.setRole(user.getRole());
+        userService.updateUser(updatingUser);
 
+        return updatingUser;
+    }
+    @PostMapping("/delete/{id}")
+    public void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+    }
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
