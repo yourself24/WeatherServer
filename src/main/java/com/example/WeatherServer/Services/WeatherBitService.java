@@ -10,7 +10,7 @@ public class WeatherBitService {
 
 
     public WeatherBit getWeatherBitData(double latitude,double longitude) {
-        String keyAPI = "03c48fa4dd74495a997f76ecd3f91e476";
+        String keyAPI = "03c48fa4dd74495a997f76ecd3f91e47";
         String url = "https://api.weatherbit.io/v2.0/current?lat="
                 +latitude
                 +"&lon="

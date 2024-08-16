@@ -75,9 +75,8 @@ public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
     public User getUserByEmail(@PathVariable String email){
         return userService.findUserByEmail(email);
     }
-@PostMapping("/forgot-password")
-public ResponseEntity<Map<String, Object>> forgotPassword(@RequestBody PasswordReset reset) {
-       String email = reset.getEmail();
+@PostMapping("/forgot-password/{email}")
+public ResponseEntity<Map<String, Object>> forgotPassword(@PathVariable String email) {
     System.out.println("Email: " + email);
     User user = userService.findUserByEmail(email);
        if(user==null){
@@ -132,9 +131,12 @@ public ResponseEntity<Map<String, Object>> forgotPassword(@RequestBody PasswordR
         updatingUser.setName(user.getName());
         updatingUser.setLocation(user.getLocation());
         updatingUser.setRole(user.getRole());
-        userService.updateUser(updatingUser);
+        if(userService.updateUser(updatingUser)) {
 
-        return updatingUser;
+
+            return updatingUser;
+        }
+        else {return null;}
     }
     @PostMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id){

@@ -56,8 +56,8 @@ public class UserService implements UserDetailsService {
 
     }
     public boolean updateUser(User user){
-        if(userRepo.findUserByEmail(user.getEmail())!=null){
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(userRepo.findById(user.getId())!=null){
+            //user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepo.save(user);
             return true;
         }

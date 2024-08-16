@@ -10,9 +10,11 @@ public class TomorrowIoService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public TomorrowIo getTomorrowIoData(String city) {
+    public TomorrowIo getTomorrowIoData(double latitude,double longitude) {
         String keyAPI = "zA0XJjbIktU6PkAfrAdlKzcRisj8pLAf";
-        String url = "https://api.tomorrow.io/v4/weather/realtime?location="+ city+ "&apikey="
+        String url = "https://api.tomorrow.io/v4/weather/realtime?location="+latitude
+                +"," + longitude
+                + "&apikey="
                 + keyAPI;
         JsonNode jsonNode = restTemplate.getForObject(url, JsonNode.class);
         return parseTomorrowResp(jsonNode);

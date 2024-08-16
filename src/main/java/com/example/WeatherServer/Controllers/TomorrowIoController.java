@@ -14,9 +14,9 @@ public class TomorrowIoController {
     public TomorrowIoController(TomorrowIoService tomorrowIoService) {
         this.tomorrowIoService = tomorrowIoService;
     }
-    @GetMapping("/current/{city}")
-    public TomorrowIo getCurrentData(@PathVariable String city){
-        return tomorrowIoService.getTomorrowIoData(city);
+    @GetMapping("/current/{latitude}/{longitude}")
+    public TomorrowIo getCurrentData(@PathVariable double latitude, @PathVariable double longitude){
+        return tomorrowIoService.getTomorrowIoData(latitude, longitude);
     }
 
 }

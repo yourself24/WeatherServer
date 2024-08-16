@@ -34,8 +34,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/create").permitAll() // Ensure /login and /create are permitted
-                        .requestMatchers("/api/weather/**").authenticated().anyRequest()
+                        .requestMatchers("/api/users/login", "/api/users/all","/api/users/getEmail/**").permitAll() // Ensure /login and /create are permitted
+                        .requestMatchers("/api/users/get/{id}","/api/users/update/{id}","/api/weather/**").authenticated().anyRequest()
                         .permitAll()
                 )
                 .securityContext(securityContext -> securityContext.securityContextRepository(securityContextRepository))
