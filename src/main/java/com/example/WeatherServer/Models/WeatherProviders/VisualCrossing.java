@@ -1,6 +1,6 @@
 package com.example.WeatherServer.Models.WeatherProviders;
 
-public class VisualCrossing {
+public class VisualCrossing extends WeatherModel {
 
     private String address;
     private String description;

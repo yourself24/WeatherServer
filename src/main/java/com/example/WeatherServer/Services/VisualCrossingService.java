@@ -18,9 +18,10 @@ public class VisualCrossingService {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter vcFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String formattedTime = currentTime.format(vcFormatter);
-        String url2 = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"+lat+","+lon+"/"+formattedTime+"?units=metric&key=" + keyAPI;
+        System.out.println(formattedTime);
+        String url2 = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"+lat+","+lon+"/"+formattedTime+"?unitGroup=metric&key=" + keyAPI;
         System.out.println(url2);
-        String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Dej,RO/2024-07-04T21:20:00?units=metric&key=" + keyAPI;
+        String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Dej,RO/2024-07-04T21:20:00?unitGroup=metric&key=" + keyAPI;
         JsonNode jsonNode = restTemplate.getForObject(url2, JsonNode.class);
         return parseVisualCrossingResp(jsonNode);
     }
@@ -30,7 +31,7 @@ public class VisualCrossingService {
         visualCrossing.setAddress(node.get("resolvedAddress").asText());
         visualCrossing.setDescription(node.path("resolvedAddress").asText());
 
-        JsonNode currDay = node.path("days").get(0);
+        JsonNode currDay = node.path("currentConditions");
         visualCrossing.setTemperature(currDay.path("temp").asDouble());
         visualCrossing.setFeelsLike(currDay.path("feelslike").asDouble());
         visualCrossing.setPrecip(currDay.path("precip").asDouble());

@@ -8,7 +8,7 @@ import com.example.WeatherServer.Services.VisualCrossingService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/weather/LocationData")
+@RequestMapping("/api/weather /LocationData")
 public class MapBoxController {
     private final MapBoxService mapBoxService;
 
@@ -19,7 +19,7 @@ public class MapBoxController {
 
     @GetMapping("/current/{longitude}/{latitude}")
     public String getCurrentLocation(@PathVariable double longitude, @PathVariable double latitude){
-        return mapBoxService.getLocation(longitude, latitude);
+        return"\"" + mapBoxService.getLocation(longitude, latitude)+ "\"";
     }
 
 }

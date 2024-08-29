@@ -1,42 +1,14 @@
 package com.example.WeatherServer.Models.WeatherProviders;
 
-public class TomorrowIo extends WeatherModel{
+public class WeatherModel {
+
     private String address;
     private String description;
     private double temperature;
     private double feelsLike;
-
-    public TomorrowIo() {
-    }
-
-    @Override
-    public String toString() {
-        return "VisualCrossing{" +
-                "address='" + address + '\'' +
-                ", description='" + description + '\'' +
-                ", temperature=" + temperature +
-                ", feelsLike=" + feelsLike +
-                ", precip=" + precip +
-                ", humidity=" + humidity +
-                ", pressure=" + pressure +
-                '}';
-    }
-
     private double precip;
     private int humidity;
     private double pressure;
-
-    public TomorrowIo(String address, String description, double temperature, double feelsLike, double precip, int humidity, double pressure) {
-        this.address = address;
-        this.description = description;
-        this.temperature = temperature;
-        this.feelsLike = feelsLike;
-        this.precip = precip;
-        this.humidity = humidity;
-        this.pressure = pressure;
-    }
-    //getters and setters
-
     public String getAddress() {
         return address;
     }
@@ -93,4 +65,16 @@ public class TomorrowIo extends WeatherModel{
         this.pressure = pressure;
     }
 
+    public WeatherModel() {
+    }
+
+    public WeatherModel(String address, String description, double temperature, double feelsLike, double precip, int humidity, double pressure) {
+        this.address = address;
+        this.description = description;
+        this.temperature = temperature;
+        this.feelsLike = feelsLike;
+        this.precip = precip;
+        this.humidity = humidity;
+        this.pressure = pressure;
+    }
 }

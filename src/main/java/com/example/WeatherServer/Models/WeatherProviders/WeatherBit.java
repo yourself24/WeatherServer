@@ -1,6 +1,6 @@
 package com.example.WeatherServer.Models.WeatherProviders;
 
-public class WeatherBit {
+public class WeatherBit extends WeatherModel{
 
     private String address;
     private String description;

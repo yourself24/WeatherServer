@@ -1,6 +1,6 @@
 package com.example.WeatherServer.Models.WeatherProviders;
 
-public class WeatherAPI {
+public class WeatherAPI extends WeatherModel{
     private String address;
     private String description;
     private double temperature;
