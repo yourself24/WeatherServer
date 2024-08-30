@@ -1,8 +1,11 @@
 package com.example.WeatherServer.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity(name = "weatherdata")
 public class WeatherDataClass {
@@ -71,11 +74,11 @@ public class WeatherDataClass {
         this.userid = userid;
     }
 
-    public Timestamp getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -99,7 +102,25 @@ public class WeatherDataClass {
     @Column(name = "userid")
     private Long userid;
     @Column(name = "date")
-    private java.sql.Timestamp date;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime date;
+
+    @Override
+    public String toString() {
+        return "WeatherDataClass{" +
+                "id=" + id +
+                ", provider='" + provider + '\'' +
+                ", address='" + address + '\'' +
+                ", temperature=" + temperature +
+                ", feels=" + feels +
+                ", precipitation=" + precipitation +
+                ", humidity=" + humidity +
+                ", pressure=" + pressure +
+                ", userid=" + userid +
+                ", date=" + date +
+                '}';
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -111,7 +132,7 @@ public class WeatherDataClass {
     public  WeatherDataClass(){
 
     }
-    public WeatherDataClass(String provider, String address, double temperature, double feels, double precipitation, int humidity, double pressure, Long userid, Timestamp date) {
+    public WeatherDataClass(String provider, String address, double temperature, double feels, double precipitation, int humidity, double pressure, Long userid, LocalDateTime date) {
         this.provider = provider;
         this.address = address;
         this.temperature = temperature;

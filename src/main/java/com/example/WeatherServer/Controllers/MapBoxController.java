@@ -8,7 +8,7 @@ import com.example.WeatherServer.Services.VisualCrossingService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/weather /LocationData")
+@RequestMapping("/api/weather/LocationData")
 public class MapBoxController {
     private final MapBoxService mapBoxService;
 
